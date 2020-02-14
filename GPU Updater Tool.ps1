@@ -129,7 +129,7 @@ catch {$null}
 
 function queryOS {
 #sets OS support
-if (($system.OS_Version -like "*Windows 10*") -eq $true) {$gpu.OSID = '57' ; $system.OS_Supported = $false}
+if (($system.OS_Version -like "*Windows 10*") -eq $true) {$gpu.OSID = '57' ; $system.OS_Supported = $true}
 elseif (($system.OS_Version -like "*Windows 8.1*") -eq $true) {$gpu.OSID = "41"; $system.OS_Supported = $false}
 elseif (($system.OS_Version -like "*Server 2016*") -eq $true) {$gpu.OSID = "74"; $system.OS_Supported = $true}
 elseif (($system.OS_Version -like "*Server 2019*") -eq $true) {$gpu.OSID = "74"; $system.OS_Supported = $true}
