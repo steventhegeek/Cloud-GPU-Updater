@@ -5,6 +5,7 @@ setting NVIDIA-SMI to the correct value on required GPUs.
 
 Supported Operating Systems
 
+Windows 10
 Windows Server 2016
 Windows Server 2019
 
