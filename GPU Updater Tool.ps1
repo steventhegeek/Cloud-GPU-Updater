@@ -161,6 +161,7 @@ if($gpu.Device_ID -eq "DEV_13F2") {$gpu.Name = 'NVIDIA Tesla M60'; $gpu.PSID = '
 ElseIF($gpu.Device_ID -eq "DEV_118A") {$gpu.Name = 'NVIDIA GRID K520'; $gpu.PSID = '94'; $gpu.PFID = '704'; $gpu.NV_GRID = $true; $gpu.Driver_Version = driverversion; $gpu.Web_Driver = webdriver; $gpu.Update_Available = ($gpu.Web_Driver -gt $gpu.Driver_Version); $gpu.Current_Mode = GPUCurrentMode; $gpu.Supported = "Yes"; $gpu.cloudProvider = cloudprovider} 
 ElseIF($gpu.Device_ID -eq "DEV_1BB1") {$gpu.Name = 'NVIDIA Quadro P4000'; $gpu.PSID = '73'; $gpu.PFID = '840'; $gpu.NV_GRID = $false; $gpu.Driver_Version = driverversion; $gpu.Web_Driver = webdriver; $gpu.Update_Available = ($gpu.Web_Driver -gt $gpu.Driver_Version); $gpu.Current_Mode = GPUCurrentMode; $gpu.Supported = "Yes"; $gpu.cloudProvider = cloudprovider} 
 Elseif($gpu.Device_ID -eq "DEV_1BB0") {$gpu.Name = 'NVIDIA Quadro P5000'; $gpu.PSID = '73'; $gpu.PFID = '823'; $gpu.NV_GRID = $false; $gpu.Driver_Version = driverversion; $gpu.Web_Driver = webdriver; $gpu.Update_Available = ($gpu.Web_Driver -gt $gpu.Driver_Version); $gpu.Current_Mode = GPUCurrentMode; $gpu.Supported = "Yes"; $gpu.cloudProvider = cloudprovider}
+Elseif($gpu.Device_ID -eq "DEV_1B30") {$gpu.Name = 'NVIDIA Quadro P6000'; $gpu.PSID = '73'; $gpu.PFID = '824'; $gpu.NV_GRID = $false; $gpu.Driver_Version = driverversion; $gpu.Web_Driver = webdriver; $gpu.Update_Available = ($gpu.Web_Driver -gt $gpu.Driver_Version); $gpu.Current_Mode = GPUCurrentMode; $gpu.Supported = "Yes"; $gpu.cloudProvider = cloudprovider}
 Elseif($gpu.Device_ID -eq "DEV_15F8") {$gpu.Name = 'NVIDIA Tesla P100'; $gpu.PSID = '103'; $gpu.PFID = '822'; $gpu.NV_GRID = $true; $gpu.Driver_Version = driverversion; $gpu.Web_Driver = webdriver; $gpu.Update_Available = ($gpu.Web_Driver -gt $gpu.Driver_Version); $gpu.Current_Mode = GPUCurrentMode; $gpu.Supported = "UnOfficial"; $gpu.cloudProvider = cloudprovider}
 Elseif($gpu.Device_ID -eq "DEV_1BB3") {$gpu.Name = 'NVIDIA Tesla P4'; $gpu.PSID = '103'; $gpu.PFID = '831'; $gpu.NV_GRID = $true; $gpu.Driver_Version = driverversion; $gpu.Web_Driver = webdriver; $gpu.Update_Available = ($gpu.Web_Driver -gt $gpu.Driver_Version); $gpu.Current_Mode = GPUCurrentMode; $gpu.Supported = "UnOfficial"; $gpu.cloudProvider = cloudprovider}
 Elseif($gpu.Device_ID -eq "DEV_1EB8") {$gpu.Name = 'NVIDIA Tesla T4'; $gpu.PSID = '110'; $gpu.PFID = '883'; $gpu.NV_GRID = $true; $gpu.Driver_Version = driverversion; $gpu.Web_Driver = webdriver; $gpu.Update_Available = ($gpu.Web_Driver -gt $gpu.Driver_Version); $gpu.Current_Mode = GPUCurrentMode; $gpu.Supported = "UnOfficial"; $gpu.cloudProvider = cloudprovider}
@@ -196,10 +197,6 @@ if ($system.Valid_NVIDIA_Driver -eq $False) {
 $app.NoDriver
 }
 Else{
-  if ($gpu.OSID -eq '57'){
-     Write-output "Windows 10 detected and NVidia driver installed, disabling Hyper-V video controller"
-     Disable-PnpDevice -InstanceId (Get-PnpDevice -FriendlyName "*Microsoft Hyper-V Video*").instanceid -confirm:$false
-      }
 }
 }
 
@@ -251,7 +248,12 @@ $ReadHost = Read-Host "(Y/N)"
        Write-Output  "Success!"
        Write-Output `n "Installing Driver, this may take up to 10 minutes and will automatically reboot if required"
        InstallDriver
-       Write-Output "Success - Driver Installed - Checking if reboot is required"
+       Write-Output "Success - Driver Installed"
+       if ($gpu.OSID -eq '57'){
+          Write-output "Windows 10 detected, disabling Hyper-V video controller"
+          Disable-PnpDevice -InstanceId (Get-PnpDevice -FriendlyName "*Microsoft Hyper-V Video*").instanceid -confirm:$false
+       }
+       Write-Output "Checking if reboot is required"
        rebootlogic
        } 
        N {Write-output "Exiting Scipt"
@@ -372,7 +374,7 @@ $app.Parsec = Write-Host -foregroundcolor red "
                                 ######(*                   
                                                            
 
-                  ~Parsec GPU Updater~
+                  ~Cloud GPU Updater - Modified by StevenTheGeek~
 " 
 
 function rebootLogic {
